@@ -641,7 +641,6 @@ const themePacks: ThemePack[] = [
         "Lasse jemanden 5 Minuten durch deine Kamerarolle schauen",
         "Schicke einem Ex eine Nachricht",
         "Poste ein Foto von deinem unaufgeräumten Zimmer",
-        "Gehe nackt um das Haus (wenn möglich und sicher)",
         "Lasse dir die Augen verbinden und esse etwas Unbekanntes",
         "Trinke einen Smoothie aus seltsamen Zutaten",
         "Lasse jemanden deine Haare stylen",
