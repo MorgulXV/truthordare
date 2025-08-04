@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Shuffle, Users, Heart } from "lucide-react"
+import { Shuffle, Users, Heart, Moon, Sun } from "lucide-react"
 
 interface Player {
   id: string
@@ -1514,6 +1514,33 @@ export default function TruthOrDareGame() {
   const [showStatistics, setShowStatistics] = useState(false)
   const [selectedPlayerStats, setSelectedPlayerStats] = useState<Player | null>(null)
   const [lastSelectedPlayerId, setLastSelectedPlayerId] = useState<string | null>(null)
+  const [darkMode, setDarkMode] = useState(false)
+
+  // Dark mode effect
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark")
+    }
+  }, [darkMode])
+
+  // Load dark mode preference from localStorage
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem("darkMode")
+    if (savedDarkMode) {
+      setDarkMode(JSON.parse(savedDarkMode))
+    }
+  }, [])
+
+  // Save dark mode preference to localStorage
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(darkMode))
+  }, [darkMode])
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode)
+  }
 
   // Check if two players are compatible for romantic challenges
   const arePlayersCompatible = (player1: Player, player2: Player): boolean => {
@@ -1802,12 +1829,16 @@ export default function TruthOrDareGame() {
 
   const StatisticsModal = () =>
     showStatistics && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+        <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle>Spieler Statistiken</CardTitle>
-              <Button variant="ghost" onClick={() => setShowStatistics(false)}>
+              <CardTitle className="dark:text-white">Spieler Statistiken</CardTitle>
+              <Button
+                variant="ghost"
+                onClick={() => setShowStatistics(false)}
+                className="dark:text-white dark:hover:bg-gray-700"
+              >
                 ✕
               </Button>
             </div>
@@ -1815,29 +1846,33 @@ export default function TruthOrDareGame() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {players.map((player) => (
-                <Card key={player.id} className="p-4">
-                  <h3 className="font-bold text-lg mb-2">{player.name}</h3>
+                <Card key={player.id} className="p-4 dark:bg-gray-700 dark:border-gray-600">
+                  <h3 className="font-bold text-lg mb-2 dark:text-white">{player.name}</h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span>Herausforderungen:</span>
-                      <Badge>{player.statistics.totalChallenges}</Badge>
+                      <span className="dark:text-gray-300">Herausforderungen:</span>
+                      <Badge className="dark:bg-gray-600 dark:text-white">{player.statistics.totalChallenges}</Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span>Wahrheiten:</span>
-                      <Badge variant="outline">{player.statistics.truthsCompleted}</Badge>
+                      <span className="dark:text-gray-300">Wahrheiten:</span>
+                      <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                        {player.statistics.truthsCompleted}
+                      </Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span>Pflichten:</span>
-                      <Badge variant="outline">{player.statistics.daresCompleted}</Badge>
+                      <span className="dark:text-gray-300">Pflichten:</span>
+                      <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                        {player.statistics.daresCompleted}
+                      </Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span>Lieblings-Thema:</span>
+                      <span className="dark:text-gray-300">Lieblings-Thema:</span>
                       <Badge className={getThemeInfo(getFavoriteTheme(player))?.color || "bg-gray-500"}>
                         {getThemeInfo(getFavoriteTheme(player))?.icon} {getThemeInfo(getFavoriteTheme(player))?.name}
                       </Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span>Lieblings-Schwierigkeit:</span>
+                      <span className="dark:text-gray-300">Lieblings-Schwierigkeit:</span>
                       <Badge className={getDifficultyColor(getFavoriteDifficulty(player))}>
                         {getDifficultyText(getFavoriteDifficulty(player))}
                       </Badge>
@@ -1847,7 +1882,7 @@ export default function TruthOrDareGame() {
                         size="sm"
                         variant="outline"
                         onClick={() => setSelectedPlayerStats(player)}
-                        className="w-full"
+                        className="w-full dark:border-gray-500 dark:text-gray-300 dark:hover:bg-gray-600"
                       >
                         Details anzeigen
                       </Button>
@@ -1863,46 +1898,54 @@ export default function TruthOrDareGame() {
 
   const PlayerDetailModal = () =>
     selectedPlayerStats && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+        <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle>{selectedPlayerStats.name} - Detaillierte Statistiken</CardTitle>
-              <Button variant="ghost" onClick={() => setSelectedPlayerStats(null)}>
+              <CardTitle className="dark:text-white">{selectedPlayerStats.name} - Detaillierte Statistiken</CardTitle>
+              <Button
+                variant="ghost"
+                onClick={() => setSelectedPlayerStats(null)}
+                className="dark:text-white dark:hover:bg-gray-700"
+              >
                 ✕
               </Button>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="p-3">
-                <h4 className="font-semibold mb-2">Themen-Verteilung</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Card className="p-3 dark:bg-gray-700 dark:border-gray-600">
+                <h4 className="font-semibold mb-2 dark:text-white">Themen-Verteilung</h4>
                 {Object.entries(selectedPlayerStats.statistics.favoriteThemes).map(([themeId, count]) => (
                   <div key={themeId} className="flex justify-between items-center mb-1">
-                    <span className="text-sm">{getThemeInfo(themeId)?.name}</span>
-                    <Badge variant="outline">{count}</Badge>
+                    <span className="text-sm dark:text-gray-300">{getThemeInfo(themeId)?.name}</span>
+                    <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                      {count}
+                    </Badge>
                   </div>
                 ))}
               </Card>
-              <Card className="p-3">
-                <h4 className="font-semibold mb-2">Schwierigkeits-Verteilung</h4>
+              <Card className="p-3 dark:bg-gray-700 dark:border-gray-600">
+                <h4 className="font-semibold mb-2 dark:text-white">Schwierigkeits-Verteilung</h4>
                 {Object.entries(selectedPlayerStats.statistics.difficultyPreferences).map(([diff, count]) => (
                   <div key={diff} className="flex justify-between items-center mb-1">
-                    <span className="text-sm">{getDifficultyText(diff)}</span>
-                    <Badge variant="outline">{count}</Badge>
+                    <span className="text-sm dark:text-gray-300">{getDifficultyText(diff)}</span>
+                    <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                      {count}
+                    </Badge>
                   </div>
                 ))}
               </Card>
             </div>
 
-            <Card className="p-3">
-              <h4 className="font-semibold mb-2">Letzte Herausforderungen</h4>
+            <Card className="p-3 dark:bg-gray-700 dark:border-gray-600">
+              <h4 className="font-semibold mb-2 dark:text-white">Letzte Herausforderungen</h4>
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {selectedPlayerStats.statistics.completedChallenges
                   .slice(-10)
                   .reverse()
                   .map((challenge, index) => (
-                    <div key={index} className="p-2 bg-gray-50 rounded text-sm">
+                    <div key={index} className="p-2 bg-gray-50 dark:bg-gray-600 rounded text-sm">
                       <div className="flex justify-between items-start mb-1">
                         <Badge variant={challenge.type === "truth" ? "default" : "destructive"}>
                           {challenge.type === "truth" ? "Wahrheit" : "Pflicht"}
@@ -1914,7 +1957,7 @@ export default function TruthOrDareGame() {
                           {challenge.rating && <span className="text-yellow-500">⭐</span>}
                         </div>
                       </div>
-                      <p className="text-xs text-gray-600 truncate">{challenge.content}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-300 truncate">{challenge.content}</p>
                     </div>
                   ))}
               </div>
@@ -1926,68 +1969,124 @@ export default function TruthOrDareGame() {
 
   if (gameState === "setup") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-100 to-purple-100 p-4">
+      <div
+        className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gradient-to-br from-pink-100 to-purple-100"} p-2 sm:p-4`}
+      >
         <div className="max-w-4xl mx-auto">
-          <Card className="mb-6">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-purple-800 flex items-center justify-center gap-2">
-                <Heart className="h-8 w-8" />
-                Wahrheit oder Pflicht
-              </CardTitle>
-              <CardDescription>Ein inklusives Spiel für alle mit verschiedenen Themen</CardDescription>
+          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
+            <CardHeader className="text-center pb-4">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex-1"></div>
+                <div className="flex-1 flex justify-center">
+                  <CardTitle className="text-2xl sm:text-3xl font-bold text-purple-800 dark:text-purple-300 flex items-center justify-center gap-2">
+                    <Heart className="h-6 w-6 sm:h-8 sm:w-8" />
+                    Wahrheit oder Pflicht
+                  </CardTitle>
+                </div>
+                <div className="flex-1 flex justify-end">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={toggleDarkMode}
+                    className="dark:text-white dark:hover:bg-gray-700"
+                  >
+                    {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                  </Button>
+                </div>
+              </div>
+              <CardDescription className="dark:text-gray-300">
+                Ein inklusives Spiel für alle mit verschiedenen Themen
+              </CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="mb-6">
+          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl dark:text-white">
+                <Users className="h-4 w-4 sm:h-5 sm:w-5" />
                 Spieler hinzufügen
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name" className="dark:text-gray-300">
+                    Name
+                  </Label>
                   <Input
                     id="name"
                     value={newPlayerName}
                     onChange={(e) => setNewPlayerName(e.target.value)}
                     placeholder="Name eingeben"
+                    className="dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="gender">Geschlecht</Label>
+                  <Label htmlFor="gender" className="dark:text-gray-300">
+                    Geschlecht
+                  </Label>
                   <Select value={newPlayerGender} onValueChange={setNewPlayerGender}>
-                    <SelectTrigger>
+                    <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                       <SelectValue placeholder="Geschlecht wählen" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Männlich</SelectItem>
-                      <SelectItem value="female">Weiblich</SelectItem>
-                      <SelectItem value="non-binary">Nicht-binär</SelectItem>
-                      <SelectItem value="genderfluid">Genderfluid</SelectItem>
-                      <SelectItem value="other">Andere</SelectItem>
-                      <SelectItem value="prefer-not-to-say">Keine Angabe</SelectItem>
+                    <SelectContent className="dark:bg-gray-700 dark:border-gray-600">
+                      <SelectItem value="male" className="dark:text-white dark:hover:bg-gray-600">
+                        Männlich
+                      </SelectItem>
+                      <SelectItem value="female" className="dark:text-white dark:hover:bg-gray-600">
+                        Weiblich
+                      </SelectItem>
+                      <SelectItem value="non-binary" className="dark:text-white dark:hover:bg-gray-600">
+                        Nicht-binär
+                      </SelectItem>
+                      <SelectItem value="genderfluid" className="dark:text-white dark:hover:bg-gray-600">
+                        Genderfluid
+                      </SelectItem>
+                      <SelectItem value="other" className="dark:text-white dark:hover:bg-gray-600">
+                        Andere
+                      </SelectItem>
+                      <SelectItem value="prefer-not-to-say" className="dark:text-white dark:hover:bg-gray-600">
+                        Keine Angabe
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="sexuality">Sexualität</Label>
+                  <Label htmlFor="sexuality" className="dark:text-gray-300">
+                    Sexualität
+                  </Label>
                   <Select value={newPlayerSexuality} onValueChange={setNewPlayerSexuality}>
-                    <SelectTrigger>
+                    <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                       <SelectValue placeholder="Sexualität wählen" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="straight">Heterosexuell</SelectItem>
-                      <SelectItem value="gay">Schwul</SelectItem>
-                      <SelectItem value="lesbian">Lesbisch</SelectItem>
-                      <SelectItem value="bisexual">Bisexuell</SelectItem>
-                      <SelectItem value="pansexual">Pansexuell</SelectItem>
-                      <SelectItem value="asexual">Asexuell</SelectItem>
-                      <SelectItem value="demisexual">Demisexuell</SelectItem>
-                      <SelectItem value="questioning">Unentschlossen</SelectItem>
-                      <SelectItem value="other">Andere</SelectItem>
+                    <SelectContent className="dark:bg-gray-700 dark:border-gray-600">
+                      <SelectItem value="straight" className="dark:text-white dark:hover:bg-gray-600">
+                        Heterosexuell
+                      </SelectItem>
+                      <SelectItem value="gay" className="dark:text-white dark:hover:bg-gray-600">
+                        Schwul
+                      </SelectItem>
+                      <SelectItem value="lesbian" className="dark:text-white dark:hover:bg-gray-600">
+                        Lesbisch
+                      </SelectItem>
+                      <SelectItem value="bisexual" className="dark:text-white dark:hover:bg-gray-600">
+                        Bisexuell
+                      </SelectItem>
+                      <SelectItem value="pansexual" className="dark:text-white dark:hover:bg-gray-600">
+                        Pansexuell
+                      </SelectItem>
+                      <SelectItem value="asexual" className="dark:text-white dark:hover:bg-gray-600">
+                        Asexuell
+                      </SelectItem>
+                      <SelectItem value="demisexual" className="dark:text-white dark:hover:bg-gray-600">
+                        Demisexuell
+                      </SelectItem>
+                      <SelectItem value="questioning" className="dark:text-white dark:hover:bg-gray-600">
+                        Unentschlossen
+                      </SelectItem>
+                      <SelectItem value="other" className="dark:text-white dark:hover:bg-gray-600">
+                        Andere
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1999,21 +2098,24 @@ export default function TruthOrDareGame() {
           </Card>
 
           {players.length > 0 && (
-            <Card className="mb-6">
+            <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Spieler ({players.length})</CardTitle>
+                <CardTitle className="dark:text-white">Spieler ({players.length})</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                   {players.map((player) => (
-                    <div key={player.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div
+                      key={player.id}
+                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    >
                       <div>
-                        <span className="font-medium">{player.name}</span>
-                        <div className="flex gap-2 mt-1">
-                          <Badge variant="outline" className="text-xs">
+                        <span className="font-medium dark:text-white">{player.name}</span>
+                        <div className="flex gap-2 mt-1 flex-wrap">
+                          <Badge variant="outline" className="text-xs dark:border-gray-500 dark:text-gray-300">
                             {player.gender}
                           </Badge>
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-xs dark:border-gray-500 dark:text-gray-300">
                             {player.sexuality}
                           </Badge>
                         </div>
@@ -2028,30 +2130,37 @@ export default function TruthOrDareGame() {
             </Card>
           )}
 
-          <Card className="mb-6">
+          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle>Schwierigkeitsgrad wählen</CardTitle>
-              <CardDescription>Wähle den Schwierigkeitsgrad für das Spiel</CardDescription>
+              <CardTitle className="dark:text-white">Schwierigkeitsgrad wählen</CardTitle>
+              <CardDescription className="dark:text-gray-300">
+                Wähle den Schwierigkeitsgrad für das Spiel
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {["easy", "medium", "hard"].map((diff) => (
                   <div
                     key={diff}
                     className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                      difficulty === diff ? "border-purple-500 bg-purple-50" : "border-gray-200 hover:border-gray-300"
+                      difficulty === diff
+                        ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20 dark:border-purple-400"
+                        : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                     }`}
                     onClick={() => setDifficulty(diff as "easy" | "medium" | "hard")}
                   >
                     <div className="text-center">
                       <div className={`w-6 h-6 rounded-full mx-auto mb-2 ${getDifficultyColor(diff)}`}></div>
-                      <h3 className="font-semibold text-lg">{getDifficultyText(diff)}</h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <h3 className="font-semibold text-lg dark:text-white">{getDifficultyText(diff)}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                         {diff === "easy" && "Harmlose und lustige Aufgaben"}
                         {diff === "medium" && "Mittlere Herausforderungen"}
                         {diff === "hard" && "Mutige und gewagte Aufgaben"}
                       </p>
-                      <Badge variant={difficulty === diff ? "default" : "outline"} className="mt-2">
+                      <Badge
+                        variant={difficulty === diff ? "default" : "outline"}
+                        className="mt-2 dark:border-gray-500"
+                      >
                         {difficulty === diff ? "Ausgewählt" : "Wählen"}
                       </Badge>
                     </div>
@@ -2061,20 +2170,22 @@ export default function TruthOrDareGame() {
             </CardContent>
           </Card>
 
-          <Card className="mb-6">
+          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle>Themen wählen</CardTitle>
-              <CardDescription>Wähle welche Themen-Pakete du einschließen möchtest (mindestens eins)</CardDescription>
+              <CardTitle className="dark:text-white">Themen wählen</CardTitle>
+              <CardDescription className="dark:text-gray-300">
+                Wähle welche Themen-Pakete du einschließen möchtest (mindestens eins)
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {themePacks.map((theme) => (
                   <div
                     key={theme.id}
                     className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                       selectedThemes.includes(theme.id)
-                        ? "border-purple-500 bg-purple-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20 dark:border-purple-400"
+                        : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                     }`}
                     onClick={() => {
                       if (selectedThemes.includes(theme.id)) {
@@ -2087,12 +2198,12 @@ export default function TruthOrDareGame() {
                     }}
                   >
                     <div className="text-center">
-                      <div className="text-3xl mb-2">{theme.icon}</div>
-                      <h3 className="font-semibold text-lg">{theme.name}</h3>
-                      <p className="text-sm text-gray-600 mt-1">{theme.description}</p>
+                      <div className="text-2xl sm:text-3xl mb-2">{theme.icon}</div>
+                      <h3 className="font-semibold text-base sm:text-lg dark:text-white">{theme.name}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{theme.description}</p>
                       <Badge
                         variant={selectedThemes.includes(theme.id) ? "default" : "outline"}
-                        className={`mt-2 ${selectedThemes.includes(theme.id) ? theme.color + " text-white" : ""}`}
+                        className={`mt-2 ${selectedThemes.includes(theme.id) ? theme.color + " text-white" : "dark:border-gray-500 dark:text-gray-300"}`}
                       >
                         {selectedThemes.includes(theme.id) ? "Ausgewählt" : "Wählen"}
                       </Badge>
@@ -2100,7 +2211,7 @@ export default function TruthOrDareGame() {
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-gray-500 mt-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
                 Ausgewählte Themen: {selectedThemes.length} • Mindestens ein Thema muss ausgewählt sein
               </p>
             </CardContent>
@@ -2115,26 +2226,60 @@ export default function TruthOrDareGame() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 to-purple-100 p-4">
+    <div
+      className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gradient-to-br from-pink-100 to-purple-100"} p-2 sm:p-4`}
+    >
       <div className="max-w-2xl mx-auto">
-        <Card className="mb-6">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-purple-800">Wahrheit oder Pflicht</CardTitle>
-            <div className="flex justify-center gap-2 mt-2">
+        <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
+          <CardHeader className="text-center pb-4">
+            <div className="flex justify-between items-start mb-4">
+              <div className="flex-1"></div>
+              <div className="flex-1 flex justify-center">
+                <CardTitle className="text-xl sm:text-2xl font-bold text-purple-800 dark:text-purple-300">
+                  Wahrheit oder Pflicht
+                </CardTitle>
+              </div>
+              <div className="flex-1 flex justify-end">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleDarkMode}
+                  className="dark:text-white dark:hover:bg-gray-700"
+                >
+                  {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                </Button>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2 mt-2">
               <Badge className={`text-white ${getDifficultyColor(difficulty)}`}>{getDifficultyText(difficulty)}</Badge>
               {currentChallenge && (
                 <Badge className={`text-white ${getThemeInfo(currentChallenge.theme)?.color || "bg-gray-500"}`}>
                   {getThemeInfo(currentChallenge.theme)?.icon} {getThemeInfo(currentChallenge.theme)?.name}
                 </Badge>
               )}
-              <Button variant="outline" size="sm" onClick={selectRandomPlayer}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={selectRandomPlayer}
+                className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 bg-transparent"
+              >
                 <Shuffle className="h-4 w-4 mr-2" />
                 Neuer Spieler
               </Button>
-              <Button variant="outline" size="sm" onClick={resetGame}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={resetGame}
+                className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 bg-transparent"
+              >
                 Spiel beenden
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowStatistics(true)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowStatistics(true)}
+                className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
                 📊 Statistiken
               </Button>
             </div>
@@ -2142,36 +2287,40 @@ export default function TruthOrDareGame() {
         </Card>
 
         {currentPlayer && (
-          <Card className="mb-6">
+          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
             <CardHeader className="text-center">
-              <CardTitle className="text-xl">{currentPlayer.name} ist dran</CardTitle>
-              <div className="flex justify-center gap-2 mt-2">
-                <Badge variant="outline">{currentPlayer.gender}</Badge>
-                <Badge variant="outline">{currentPlayer.sexuality}</Badge>
+              <CardTitle className="text-lg sm:text-xl dark:text-white">{currentPlayer.name} ist dran</CardTitle>
+              <div className="flex justify-center gap-2 mt-2 flex-wrap">
+                <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                  {currentPlayer.gender}
+                </Badge>
+                <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                  {currentPlayer.sexuality}
+                </Badge>
               </div>
             </CardHeader>
             <CardContent>
               {!currentChallenge ? (
-                <div className="flex gap-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     onClick={() => selectTruthOrDare("truth")}
-                    className="text-lg py-6 px-8 bg-blue-500 hover:bg-blue-600"
+                    className="text-lg py-6 px-8 bg-blue-500 hover:bg-blue-600 w-full sm:w-auto"
                   >
                     Wahrheit
                   </Button>
                   <Button
                     onClick={() => selectTruthOrDare("dare")}
-                    className="text-lg py-6 px-8 bg-red-500 hover:bg-red-600"
+                    className="text-lg py-6 px-8 bg-red-500 hover:bg-red-600 w-full sm:w-auto"
                   >
                     Pflicht
                   </Button>
                 </div>
               ) : (
                 <div className="text-center space-y-4">
-                  <div className="flex justify-center gap-2">
+                  <div className="flex justify-center gap-2 flex-wrap">
                     <Badge
                       variant={currentChallenge.type === "truth" ? "default" : "destructive"}
-                      className="text-lg px-4 py-2"
+                      className="text-base sm:text-lg px-4 py-2"
                     >
                       {currentChallenge.type === "truth" ? "WAHRHEIT" : "PFLICHT"}
                     </Badge>
@@ -2179,17 +2328,25 @@ export default function TruthOrDareGame() {
                       {getDifficultyText(currentChallenge.difficulty)}
                     </Badge>
                   </div>
-                  <p className="text-lg font-medium p-4 bg-white rounded-lg border-2 border-dashed">
+                  <p className="text-base sm:text-lg font-medium p-4 bg-white dark:bg-gray-700 dark:text-white rounded-lg border-2 border-dashed dark:border-gray-600">
                     {currentChallenge.content}
                   </p>
-                  <div className="flex gap-2 justify-center">
-                    <Button onClick={() => completeChallenge()} className="text-lg py-4 px-6">
+                  <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                    <Button onClick={() => completeChallenge()} className="text-base sm:text-lg py-4 px-6">
                       Erledigt
                     </Button>
-                    <Button onClick={() => completeChallenge(5)} variant="outline" className="text-lg py-4 px-6">
+                    <Button
+                      onClick={() => completeChallenge(5)}
+                      variant="outline"
+                      className="text-base sm:text-lg py-4 px-6 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
                       ⭐ Super!
                     </Button>
-                    <Button onClick={nextTurn} variant="ghost" className="text-lg py-4 px-6">
+                    <Button
+                      onClick={nextTurn}
+                      variant="ghost"
+                      className="text-base sm:text-lg py-4 px-6 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
                       Überspringen
                     </Button>
                   </div>
@@ -2199,21 +2356,25 @@ export default function TruthOrDareGame() {
           </Card>
         )}
 
-        <Card>
+        <Card className="dark:bg-gray-800 dark:border-gray-700">
           <CardHeader>
-            <CardTitle className="text-center">Spielregeln</CardTitle>
+            <CardTitle className="text-center dark:text-white">Spielregeln</CardTitle>
           </CardHeader>
           <CardContent className="text-sm space-y-2">
-            <p>
+            <p className="dark:text-gray-300">
               • Wähle <strong>Wahrheit</strong>, um eine Frage ehrlich zu beantworten
             </p>
-            <p>
+            <p className="dark:text-gray-300">
               • Wähle <strong>Pflicht</strong>, um eine Herausforderung zu meistern
             </p>
-            <p>• Jeder sollte sich wohlfühlen - überspringe alles, womit du nicht einverstanden bist</p>
-            <p>• Romantische Aufgaben erscheinen nur zwischen kompatiblen Spielern</p>
-            <p>• Verschiedene Themen bieten unterschiedliche Arten von Herausforderungen</p>
-            <p>• Hab Spaß und sei respektvoll zu allen!</p>
+            <p className="dark:text-gray-300">
+              • Jeder sollte sich wohlfühlen - überspringe alles, womit du nicht einverstanden bist
+            </p>
+            <p className="dark:text-gray-300">• Romantische Aufgaben erscheinen nur zwischen kompatiblen Spielern</p>
+            <p className="dark:text-gray-300">
+              • Verschiedene Themen bieten unterschiedliche Arten von Herausforderungen
+            </p>
+            <p className="dark:text-gray-300">• Hab Spaß und sei respektvoll zu allen!</p>
           </CardContent>
         </Card>
       </div>
