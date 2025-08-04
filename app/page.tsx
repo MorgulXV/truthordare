@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Shuffle, Users, Heart, Moon, Sun } from "lucide-react"
+import { Moon, Sun, Plus, ChevronRight, X, Check, Star, Shuffle, Users, Heart } from "lucide-react"
 
 interface Player {
   id: string
@@ -859,7 +858,7 @@ const themePacks: ThemePack[] = [
         "Was ist das Verrückteste auf deiner Bucket List?",
         "Hast du schon mal eine Mutprobe gemacht?",
         "Was ist das Adrenalinreichste, was du erlebt hast?",
-        "Welche Grenze würdest du niemals überschreiten?",
+        "Welche Grenze würdest du niemals überschre iten?",
         "Was ist das Spontanste, was du je getan hast?",
         "Hast du schon mal etwas Verbotenes getan?",
         "Was würdest du tun, wenn du nur noch einen Tag zu leben hättest?",
@@ -1829,188 +1828,191 @@ export default function TruthOrDareGame() {
 
   const StatisticsModal = () =>
     showStatistics && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
-        <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle className="dark:text-white">Spieler Statistiken</CardTitle>
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 apple-transition">
+        <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto apple-card bg-white/95 dark:bg-black/95">
+          <div className="p-8">
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="apple-headline text-3xl">Spieler Statistiken</h2>
               <Button
                 variant="ghost"
                 onClick={() => setShowStatistics(false)}
-                className="dark:text-white dark:hover:bg-gray-700"
+                className="apple-button-secondary h-12 w-12 rounded-full p-0"
               >
-                ✕
+                <X className="h-6 w-6" />
               </Button>
             </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {players.map((player) => (
-                <Card key={player.id} className="p-4 dark:bg-gray-700 dark:border-gray-600">
-                  <h3 className="font-bold text-lg mb-2 dark:text-white">{player.name}</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="dark:text-gray-300">Herausforderungen:</span>
-                      <Badge className="dark:bg-gray-600 dark:text-white">{player.statistics.totalChallenges}</Badge>
+                <div key={player.id} className="apple-card p-6 bg-white/80 dark:bg-gray-900/80">
+                  <h3 className="text-xl font-semibold mb-4">{player.name}</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Herausforderungen</span>
+                      <Badge className="apple-badge bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        {player.statistics.totalChallenges}
+                      </Badge>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="dark:text-gray-300">Wahrheiten:</span>
-                      <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Wahrheiten</span>
+                      <Badge className="apple-badge bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                         {player.statistics.truthsCompleted}
                       </Badge>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="dark:text-gray-300">Pflichten:</span>
-                      <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Pflichten</span>
+                      <Badge className="apple-badge bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
                         {player.statistics.daresCompleted}
                       </Badge>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="dark:text-gray-300">Lieblings-Thema:</span>
-                      <Badge className={getThemeInfo(getFavoriteTheme(player))?.color || "bg-gray-500"}>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Lieblings-Thema</span>
+                      <Badge className="apple-badge bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
                         {getThemeInfo(getFavoriteTheme(player))?.icon} {getThemeInfo(getFavoriteTheme(player))?.name}
                       </Badge>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="dark:text-gray-300">Lieblings-Schwierigkeit:</span>
-                      <Badge className={getDifficultyColor(getFavoriteDifficulty(player))}>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Lieblings-Schwierigkeit</span>
+                      <Badge className="apple-badge bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                         {getDifficultyText(getFavoriteDifficulty(player))}
                       </Badge>
                     </div>
-                    <div className="mt-3">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setSelectedPlayerStats(player)}
-                        className="w-full dark:border-gray-500 dark:text-gray-300 dark:hover:bg-gray-600"
-                      >
+                    <div className="mt-4">
+                      <Button onClick={() => setSelectedPlayerStats(player)} className="apple-button-secondary w-full">
                         Details anzeigen
+                        <ChevronRight className="h-4 w-4 ml-2" />
                       </Button>
                     </div>
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     )
 
   const PlayerDetailModal = () =>
     selectedPlayerStats && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
-        <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle className="dark:text-white">{selectedPlayerStats.name} - Detaillierte Statistiken</CardTitle>
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 apple-transition">
+        <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto apple-card bg-white/95 dark:bg-black/95">
+          <div className="p-8">
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="apple-headline text-3xl">{selectedPlayerStats.name}</h2>
               <Button
                 variant="ghost"
                 onClick={() => setSelectedPlayerStats(null)}
-                className="dark:text-white dark:hover:bg-gray-700"
+                className="apple-button-secondary h-12 w-12 rounded-full p-0"
               >
-                ✕
+                <X className="h-6 w-6" />
               </Button>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Card className="p-3 dark:bg-gray-700 dark:border-gray-600">
-                <h4 className="font-semibold mb-2 dark:text-white">Themen-Verteilung</h4>
-                {Object.entries(selectedPlayerStats.statistics.favoriteThemes).map(([themeId, count]) => (
-                  <div key={themeId} className="flex justify-between items-center mb-1">
-                    <span className="text-sm dark:text-gray-300">{getThemeInfo(themeId)?.name}</span>
-                    <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
-                      {count}
-                    </Badge>
-                  </div>
-                ))}
-              </Card>
-              <Card className="p-3 dark:bg-gray-700 dark:border-gray-600">
-                <h4 className="font-semibold mb-2 dark:text-white">Schwierigkeits-Verteilung</h4>
-                {Object.entries(selectedPlayerStats.statistics.difficultyPreferences).map(([diff, count]) => (
-                  <div key={diff} className="flex justify-between items-center mb-1">
-                    <span className="text-sm dark:text-gray-300">{getDifficultyText(diff)}</span>
-                    <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
-                      {count}
-                    </Badge>
-                  </div>
-                ))}
-              </Card>
-            </div>
-
-            <Card className="p-3 dark:bg-gray-700 dark:border-gray-600">
-              <h4 className="font-semibold mb-2 dark:text-white">Letzte Herausforderungen</h4>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {selectedPlayerStats.statistics.completedChallenges
-                  .slice(-10)
-                  .reverse()
-                  .map((challenge, index) => (
-                    <div key={index} className="p-2 bg-gray-50 dark:bg-gray-600 rounded text-sm">
-                      <div className="flex justify-between items-start mb-1">
-                        <Badge variant={challenge.type === "truth" ? "default" : "destructive"}>
-                          {challenge.type === "truth" ? "Wahrheit" : "Pflicht"}
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="apple-card p-6 bg-white/80 dark:bg-gray-900/80">
+                  <h4 className="text-lg font-semibold mb-4">Themen-Verteilung</h4>
+                  <div className="space-y-2">
+                    {Object.entries(selectedPlayerStats.statistics.favoriteThemes).map(([themeId, count]) => (
+                      <div key={themeId} className="flex justify-between items-center">
+                        <span className="text-sm">{getThemeInfo(themeId)?.name}</span>
+                        <Badge className="apple-badge bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+                          {count}
                         </Badge>
-                        <div className="flex gap-1">
-                          <Badge className={getDifficultyColor(challenge.difficulty)}>
-                            {getDifficultyText(challenge.difficulty)}
-                          </Badge>
-                          {challenge.rating && <span className="text-yellow-500">⭐</span>}
-                        </div>
                       </div>
-                      <p className="text-xs text-gray-600 dark:text-gray-300 truncate">{challenge.content}</p>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+                <div className="apple-card p-6 bg-white/80 dark:bg-gray-900/80">
+                  <h4 className="text-lg font-semibold mb-4">Schwierigkeits-Verteilung</h4>
+                  <div className="space-y-2">
+                    {Object.entries(selectedPlayerStats.statistics.difficultyPreferences).map(([diff, count]) => (
+                      <div key={diff} className="flex justify-between items-center">
+                        <span className="text-sm">{getDifficultyText(diff)}</span>
+                        <Badge className="apple-badge bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+                          {count}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </Card>
-          </CardContent>
-        </Card>
+
+              <div className="apple-card p-6 bg-white/80 dark:bg-gray-900/80">
+                <h4 className="text-lg font-semibold mb-4">Letzte Herausforderungen</h4>
+                <div className="space-y-3 max-h-60 overflow-y-auto">
+                  {selectedPlayerStats.statistics.completedChallenges
+                    .slice(-10)
+                    .reverse()
+                    .map((challenge, index) => (
+                      <div key={index} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div className="flex justify-between items-start mb-2">
+                          <Badge
+                            className={`apple-badge ${
+                              challenge.type === "truth"
+                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                            }`}
+                          >
+                            {challenge.type === "truth" ? "Wahrheit" : "Pflicht"}
+                          </Badge>
+                          <div className="flex gap-2 items-center">
+                            <Badge className={`apple-badge ${getDifficultyColor(challenge.difficulty)} text-white`}>
+                              {getDifficultyText(challenge.difficulty)}
+                            </Badge>
+                            {challenge.rating && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{challenge.content}</p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
 
   if (gameState === "setup") {
     return (
-      <div
-        className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gradient-to-br from-pink-100 to-purple-100"} p-2 sm:p-4`}
-      >
-        <div className="max-w-4xl mx-auto">
-          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader className="text-center pb-4">
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex-1"></div>
-                <div className="flex-1 flex justify-center">
-                  <CardTitle className="text-2xl sm:text-3xl font-bold text-purple-800 dark:text-purple-300 flex items-center justify-center gap-2">
-                    <Heart className="h-6 w-6 sm:h-8 sm:w-8" />
-                    Wahrheit oder Pflicht
-                  </CardTitle>
-                </div>
-                <div className="flex-1 flex justify-end">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={toggleDarkMode}
-                    className="dark:text-white dark:hover:bg-gray-700"
-                  >
-                    {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                  </Button>
-                </div>
+      <div className={`min-h-screen apple-gradient ${darkMode ? "dark" : ""}`}>
+        {/* Hero Section */}
+        <section className="apple-section text-center">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex-1"></div>
+              <div className="flex-1 flex justify-center">
+                <Heart className="h-16 w-16 text-red-500 mb-4" />
               </div>
-              <CardDescription className="dark:text-gray-300">
-                Ein inklusives Spiel für alle mit verschiedenen Themen
-              </CardDescription>
-            </CardHeader>
-          </Card>
+              <div className="flex-1 flex justify-end">
+                <Button
+                  variant="ghost"
+                  onClick={toggleDarkMode}
+                  className="apple-button-secondary h-12 w-12 rounded-full p-0"
+                >
+                  {darkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
+                </Button>
+              </div>
+            </div>
+            <h1 className="apple-headline mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Wahrheit oder Pflicht
+            </h1>
+            <p className="apple-subheadline mb-12">
+              Ein inklusives Spiel für alle mit verschiedenen Themen und Schwierigkeitsgraden
+            </p>
+          </div>
+        </section>
 
-          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl dark:text-white">
-                <Users className="h-4 w-4 sm:h-5 sm:w-5" />
-                Spieler hinzufügen
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 gap-4">
+        {/* Player Setup Section */}
+        <section className="py-16">
+          <div className="max-w-2xl mx-auto px-6">
+            <div className="apple-card p-8 mb-8 bg-white/80 dark:bg-gray-900/80">
+              <div className="flex items-center gap-3 mb-6">
+                <Users className="h-6 w-6 text-blue-500" />
+                <h2 className="text-2xl font-semibold">Spieler hinzufügen</h2>
+              </div>
+              <div className="space-y-6">
                 <div>
-                  <Label htmlFor="name" className="dark:text-gray-300">
+                  <Label htmlFor="name" className="text-sm font-medium mb-2 block">
                     Name
                   </Label>
                   <Input
@@ -2018,366 +2020,354 @@ export default function TruthOrDareGame() {
                     value={newPlayerName}
                     onChange={(e) => setNewPlayerName(e.target.value)}
                     placeholder="Name eingeben"
-                    className="dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                    className="apple-input h-12"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="gender" className="dark:text-gray-300">
+                  <Label htmlFor="gender" className="text-sm font-medium mb-2 block">
                     Geschlecht
                   </Label>
                   <Select value={newPlayerGender} onValueChange={setNewPlayerGender}>
-                    <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <SelectTrigger className="apple-input h-12">
                       <SelectValue placeholder="Geschlecht wählen" />
                     </SelectTrigger>
-                    <SelectContent className="dark:bg-gray-700 dark:border-gray-600">
-                      <SelectItem value="male" className="dark:text-white dark:hover:bg-gray-600">
-                        Männlich
-                      </SelectItem>
-                      <SelectItem value="female" className="dark:text-white dark:hover:bg-gray-600">
-                        Weiblich
-                      </SelectItem>
-                      <SelectItem value="non-binary" className="dark:text-white dark:hover:bg-gray-600">
-                        Nicht-binär
-                      </SelectItem>
-                      <SelectItem value="genderfluid" className="dark:text-white dark:hover:bg-gray-600">
-                        Genderfluid
-                      </SelectItem>
-                      <SelectItem value="other" className="dark:text-white dark:hover:bg-gray-600">
-                        Andere
-                      </SelectItem>
-                      <SelectItem value="prefer-not-to-say" className="dark:text-white dark:hover:bg-gray-600">
-                        Keine Angabe
-                      </SelectItem>
+                    <SelectContent className="apple-card">
+                      <SelectItem value="male">Männlich</SelectItem>
+                      <SelectItem value="female">Weiblich</SelectItem>
+                      <SelectItem value="non-binary">Nicht-binär</SelectItem>
+                      <SelectItem value="genderfluid">Genderfluid</SelectItem>
+                      <SelectItem value="other">Andere</SelectItem>
+                      <SelectItem value="prefer-not-to-say">Keine Angabe</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="sexuality" className="dark:text-gray-300">
+                  <Label htmlFor="sexuality" className="text-sm font-medium mb-2 block">
                     Sexualität
                   </Label>
                   <Select value={newPlayerSexuality} onValueChange={setNewPlayerSexuality}>
-                    <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <SelectTrigger className="apple-input h-12">
                       <SelectValue placeholder="Sexualität wählen" />
                     </SelectTrigger>
-                    <SelectContent className="dark:bg-gray-700 dark:border-gray-600">
-                      <SelectItem value="straight" className="dark:text-white dark:hover:bg-gray-600">
-                        Heterosexuell
-                      </SelectItem>
-                      <SelectItem value="gay" className="dark:text-white dark:hover:bg-gray-600">
-                        Schwul
-                      </SelectItem>
-                      <SelectItem value="lesbian" className="dark:text-white dark:hover:bg-gray-600">
-                        Lesbisch
-                      </SelectItem>
-                      <SelectItem value="bisexual" className="dark:text-white dark:hover:bg-gray-600">
-                        Bisexuell
-                      </SelectItem>
-                      <SelectItem value="pansexual" className="dark:text-white dark:hover:bg-gray-600">
-                        Pansexuell
-                      </SelectItem>
-                      <SelectItem value="asexual" className="dark:text-white dark:hover:bg-gray-600">
-                        Asexuell
-                      </SelectItem>
-                      <SelectItem value="demisexual" className="dark:text-white dark:hover:bg-gray-600">
-                        Demisexuell
-                      </SelectItem>
-                      <SelectItem value="questioning" className="dark:text-white dark:hover:bg-gray-600">
-                        Unentschlossen
-                      </SelectItem>
-                      <SelectItem value="other" className="dark:text-white dark:hover:bg-gray-600">
-                        Andere
-                      </SelectItem>
+                    <SelectContent className="apple-card">
+                      <SelectItem value="straight">Heterosexuell</SelectItem>
+                      <SelectItem value="gay">Schwul</SelectItem>
+                      <SelectItem value="lesbian">Lesbisch</SelectItem>
+                      <SelectItem value="bisexual">Bisexuell</SelectItem>
+                      <SelectItem value="pansexual">Pansexuell</SelectItem>
+                      <SelectItem value="asexual">Asexuell</SelectItem>
+                      <SelectItem value="demisexual">Demisexuell</SelectItem>
+                      <SelectItem value="questioning">Unentschlossen</SelectItem>
+                      <SelectItem value="other">Andere</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+                <Button onClick={addPlayer} className="apple-button w-full h-12 text-base">
+                  <Plus className="h-5 w-5 mr-2" />
+                  Spieler hinzufügen
+                </Button>
               </div>
-              <Button onClick={addPlayer} className="w-full">
-                Spieler hinzufügen
-              </Button>
-            </CardContent>
-          </Card>
+            </div>
 
-          {players.length > 0 && (
-            <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
-              <CardHeader>
-                <CardTitle className="dark:text-white">Spieler ({players.length})</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-2">
+            {/* Players List */}
+            {players.length > 0 && (
+              <div className="apple-card p-8 mb-8 bg-white/80 dark:bg-gray-900/80">
+                <h3 className="text-xl font-semibold mb-6">Spieler ({players.length})</h3>
+                <div className="space-y-4">
                   {players.map((player) => (
                     <div
                       key={player.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl apple-transition hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       <div>
-                        <span className="font-medium dark:text-white">{player.name}</span>
-                        <div className="flex gap-2 mt-1 flex-wrap">
-                          <Badge variant="outline" className="text-xs dark:border-gray-500 dark:text-gray-300">
+                        <span className="font-medium text-lg">{player.name}</span>
+                        <div className="flex gap-2 mt-2">
+                          <Badge className="apple-badge bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                             {player.gender}
                           </Badge>
-                          <Badge variant="outline" className="text-xs dark:border-gray-500 dark:text-gray-300">
+                          <Badge className="apple-badge bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
                             {player.sexuality}
                           </Badge>
                         </div>
                       </div>
-                      <Button variant="destructive" size="sm" onClick={() => removePlayer(player.id)}>
+                      <Button
+                        variant="destructive"
+                        onClick={() => removePlayer(player.id)}
+                        className="apple-button h-10 px-4"
+                      >
                         Entfernen
                       </Button>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader>
-              <CardTitle className="dark:text-white">Schwierigkeitsgrad wählen</CardTitle>
-              <CardDescription className="dark:text-gray-300">
-                Wähle den Schwierigkeitsgrad für das Spiel
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {["easy", "medium", "hard"].map((diff) => (
-                  <div
-                    key={diff}
-                    className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                      difficulty === diff
-                        ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20 dark:border-purple-400"
-                        : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                    }`}
-                    onClick={() => setDifficulty(diff as "easy" | "medium" | "hard")}
-                  >
-                    <div className="text-center">
-                      <div className={`w-6 h-6 rounded-full mx-auto mb-2 ${getDifficultyColor(diff)}`}></div>
-                      <h3 className="font-semibold text-lg dark:text-white">{getDifficultyText(diff)}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                        {diff === "easy" && "Harmlose und lustige Aufgaben"}
-                        {diff === "medium" && "Mittlere Herausforderungen"}
-                        {diff === "hard" && "Mutige und gewagte Aufgaben"}
-                      </p>
-                      <Badge
-                        variant={difficulty === diff ? "default" : "outline"}
-                        className="mt-2 dark:border-gray-500"
-                      >
-                        {difficulty === diff ? "Ausgewählt" : "Wählen"}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
               </div>
-            </CardContent>
-          </Card>
+            )}
+          </div>
+        </section>
 
-          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader>
-              <CardTitle className="dark:text-white">Themen wählen</CardTitle>
-              <CardDescription className="dark:text-gray-300">
-                Wähle welche Themen-Pakete du einschließen möchtest (mindestens eins)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {themePacks.map((theme) => (
-                  <div
-                    key={theme.id}
-                    className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                      selectedThemes.includes(theme.id)
-                        ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20 dark:border-purple-400"
-                        : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                    }`}
-                    onClick={() => {
-                      if (selectedThemes.includes(theme.id)) {
-                        if (selectedThemes.length > 1) {
-                          setSelectedThemes(selectedThemes.filter((id) => id !== theme.id))
-                        }
-                      } else {
-                        setSelectedThemes([...selectedThemes, theme.id])
+        {/* Difficulty Selection */}
+        <section className="py-16 bg-gray-50/50 dark:bg-gray-900/50">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Schwierigkeitsgrad wählen</h2>
+              <p className="apple-subheadline">Wähle den Schwierigkeitsgrad für das Spiel</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {["easy", "medium", "hard"].map((diff) => (
+                <div
+                  key={diff}
+                  className={`apple-card p-8 cursor-pointer apple-transition ${
+                    difficulty === diff
+                      ? "ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20"
+                      : "hover:bg-white/90 dark:hover:bg-gray-800/90"
+                  }`}
+                  onClick={() => setDifficulty(diff as "easy" | "medium" | "hard")}
+                >
+                  <div className="text-center">
+                    <div className={`w-12 h-12 rounded-full mx-auto mb-4 ${getDifficultyColor(diff)}`}></div>
+                    <h3 className="text-xl font-semibold mb-2">{getDifficultyText(diff)}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">
+                      {diff === "easy" && "Harmlose und lustige Aufgaben"}
+                      {diff === "medium" && "Mittlere Herausforderungen"}
+                      {diff === "hard" && "Mutige und gewagte Aufgaben"}
+                    </p>
+                    <Badge
+                      className={`apple-badge ${
+                        difficulty === diff
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
+                      }`}
+                    >
+                      {difficulty === diff ? <Check className="h-4 w-4 mr-1" /> : null}
+                      {difficulty === diff ? "Ausgewählt" : "Wählen"}
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Theme Selection */}
+        <section className="py-16">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Themen wählen</h2>
+              <p className="apple-subheadline">Wähle welche Themen-Pakete du einschließen möchtest</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {themePacks.map((theme) => (
+                <div
+                  key={theme.id}
+                  className={`apple-card p-8 cursor-pointer apple-transition ${
+                    selectedThemes.includes(theme.id)
+                      ? "ring-2 ring-purple-500 bg-purple-50/50 dark:bg-purple-900/20"
+                      : "hover:bg-white/90 dark:hover:bg-gray-800/90"
+                  }`}
+                  onClick={() => {
+                    if (selectedThemes.includes(theme.id)) {
+                      if (selectedThemes.length > 1) {
+                        setSelectedThemes(selectedThemes.filter((id) => id !== theme.id))
                       }
-                    }}
-                  >
-                    <div className="text-center">
-                      <div className="text-2xl sm:text-3xl mb-2">{theme.icon}</div>
-                      <h3 className="font-semibold text-base sm:text-lg dark:text-white">{theme.name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{theme.description}</p>
-                      <Badge
-                        variant={selectedThemes.includes(theme.id) ? "default" : "outline"}
-                        className={`mt-2 ${selectedThemes.includes(theme.id) ? theme.color + " text-white" : "dark:border-gray-500 dark:text-gray-300"}`}
-                      >
-                        {selectedThemes.includes(theme.id) ? "Ausgewählt" : "Wählen"}
-                      </Badge>
-                    </div>
+                    } else {
+                      setSelectedThemes([...selectedThemes, theme.id])
+                    }
+                  }}
+                >
+                  <div className="text-center">
+                    <div className="text-4xl mb-4">{theme.icon}</div>
+                    <h3 className="text-xl font-semibold mb-2">{theme.name}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">{theme.description}</p>
+                    <Badge
+                      className={`apple-badge ${
+                        selectedThemes.includes(theme.id)
+                          ? "bg-purple-500 text-white"
+                          : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200"
+                      }`}
+                    >
+                      {selectedThemes.includes(theme.id) ? <Check className="h-4 w-4 mr-1" /> : null}
+                      {selectedThemes.includes(theme.id) ? "Ausgewählt" : "Wählen"}
+                    </Badge>
                   </div>
-                ))}
-              </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-                Ausgewählte Themen: {selectedThemes.length} • Mindestens ein Thema muss ausgewählt sein
-              </p>
-            </CardContent>
-          </Card>
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-gray-500 dark:text-gray-400 mt-8">
+              Ausgewählte Themen: {selectedThemes.length} • Mindestens ein Thema muss ausgewählt sein
+            </p>
+          </div>
+        </section>
 
-          <Button onClick={startGame} disabled={players.length < 2} className="w-full text-lg py-6">
-            Spiel starten (Mindestens 2 Spieler)
-          </Button>
-        </div>
+        {/* Start Game Button */}
+        <section className="py-16">
+          <div className="max-w-2xl mx-auto px-6 text-center">
+            <Button
+              onClick={startGame}
+              disabled={players.length < 2}
+              className="apple-button h-16 px-12 text-xl font-semibold"
+            >
+              Spiel starten
+              <ChevronRight className="h-6 w-6 ml-2" />
+            </Button>
+            {players.length < 2 && (
+              <p className="text-gray-500 dark:text-gray-400 mt-4">Mindestens 2 Spieler erforderlich</p>
+            )}
+          </div>
+        </section>
       </div>
     )
   }
 
   return (
-    <div
-      className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gradient-to-br from-pink-100 to-purple-100"} p-2 sm:p-4`}
-    >
-      <div className="max-w-2xl mx-auto">
-        <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader className="text-center pb-4">
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex-1"></div>
-              <div className="flex-1 flex justify-center">
-                <CardTitle className="text-xl sm:text-2xl font-bold text-purple-800 dark:text-purple-300">
-                  Wahrheit oder Pflicht
-                </CardTitle>
-              </div>
-              <div className="flex-1 flex justify-end">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleDarkMode}
-                  className="dark:text-white dark:hover:bg-gray-700"
-                >
-                  {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                </Button>
-              </div>
+    <div className={`min-h-screen apple-gradient ${darkMode ? "dark" : ""}`}>
+      {/* Game Header */}
+      <section className="py-8 border-b border-gray-200/50 dark:border-gray-700/50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex-1"></div>
+            <div className="flex-1 flex justify-center">
+              <h1 className="text-2xl font-bold">Wahrheit oder Pflicht</h1>
             </div>
-            <div className="flex flex-wrap justify-center gap-2 mt-2">
-              <Badge className={`text-white ${getDifficultyColor(difficulty)}`}>{getDifficultyText(difficulty)}</Badge>
-              {currentChallenge && (
-                <Badge className={`text-white ${getThemeInfo(currentChallenge.theme)?.color || "bg-gray-500"}`}>
-                  {getThemeInfo(currentChallenge.theme)?.icon} {getThemeInfo(currentChallenge.theme)?.name}
-                </Badge>
-              )}
+            <div className="flex-1 flex justify-end">
               <Button
-                variant="outline"
-                size="sm"
-                onClick={selectRandomPlayer}
-                className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 bg-transparent"
+                variant="ghost"
+                onClick={toggleDarkMode}
+                className="apple-button-secondary h-10 w-10 rounded-full p-0"
               >
-                <Shuffle className="h-4 w-4 mr-2" />
-                Neuer Spieler
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={resetGame}
-                className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 bg-transparent"
-              >
-                Spiel beenden
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowStatistics(true)}
-                className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-              >
-                📊 Statistiken
+                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
             </div>
-          </CardHeader>
-        </Card>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Badge className={`apple-badge ${getDifficultyColor(difficulty)} text-white`}>
+              {getDifficultyText(difficulty)}
+            </Badge>
+            {currentChallenge && (
+              <Badge
+                className={`apple-badge ${getThemeInfo(currentChallenge.theme)?.color || "bg-gray-500"} text-white`}
+              >
+                {getThemeInfo(currentChallenge.theme)?.icon} {getThemeInfo(currentChallenge.theme)?.name}
+              </Badge>
+            )}
+            <Button
+              variant="outline"
+              onClick={selectRandomPlayer}
+              className="apple-button-secondary h-8 px-3 text-sm bg-transparent"
+            >
+              <Shuffle className="h-4 w-4 mr-2" />
+              Neuer Spieler
+            </Button>
+            <Button
+              variant="outline"
+              onClick={resetGame}
+              className="apple-button-secondary h-8 px-3 text-sm bg-transparent"
+            >
+              Spiel beenden
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowStatistics(true)}
+              className="apple-button-secondary h-8 px-3 text-sm"
+            >
+              📊 Statistiken
+            </Button>
+          </div>
+        </div>
+      </section>
 
-        {currentPlayer && (
-          <Card className="mb-4 sm:mb-6 dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader className="text-center">
-              <CardTitle className="text-lg sm:text-xl dark:text-white">{currentPlayer.name} ist dran</CardTitle>
-              <div className="flex justify-center gap-2 mt-2 flex-wrap">
-                <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+      {/* Current Player Section */}
+      {currentPlayer && (
+        <section className="py-16">
+          <div className="max-w-2xl mx-auto px-6">
+            <div className="apple-card p-8 mb-8 bg-white/90 dark:bg-gray-900/90 text-center">
+              <h2 className="text-3xl font-bold mb-4">{currentPlayer.name} ist dran</h2>
+              <div className="flex justify-center gap-3 mb-8">
+                <Badge className="apple-badge bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                   {currentPlayer.gender}
                 </Badge>
-                <Badge variant="outline" className="dark:border-gray-500 dark:text-gray-300">
+                <Badge className="apple-badge bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
                   {currentPlayer.sexuality}
                 </Badge>
               </div>
-            </CardHeader>
-            <CardContent>
+
               {!currentChallenge ? (
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button
-                    onClick={() => selectTruthOrDare("truth")}
-                    className="text-lg py-6 px-8 bg-blue-500 hover:bg-blue-600 w-full sm:w-auto"
-                  >
-                    Wahrheit
-                  </Button>
-                  <Button
-                    onClick={() => selectTruthOrDare("dare")}
-                    className="text-lg py-6 px-8 bg-red-500 hover:bg-red-600 w-full sm:w-auto"
-                  >
-                    Pflicht
-                  </Button>
+                <div className="space-y-6">
+                  <p className="apple-subheadline">Wähle deine Herausforderung</p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button
+                      onClick={() => selectTruthOrDare("truth")}
+                      className="apple-button h-16 px-12 text-xl bg-blue-500 hover:bg-blue-600"
+                    >
+                      Wahrheit
+                    </Button>
+                    <Button
+                      onClick={() => selectTruthOrDare("dare")}
+                      className="apple-button h-16 px-12 text-xl bg-red-500 hover:bg-red-600"
+                    >
+                      Pflicht
+                    </Button>
+                  </div>
                 </div>
               ) : (
-                <div className="text-center space-y-4">
-                  <div className="flex justify-center gap-2 flex-wrap">
+                <div className="space-y-8">
+                  <div className="flex justify-center gap-3">
                     <Badge
-                      variant={currentChallenge.type === "truth" ? "default" : "destructive"}
-                      className="text-base sm:text-lg px-4 py-2"
+                      className={`apple-badge text-lg px-6 py-2 ${
+                        currentChallenge.type === "truth" ? "bg-blue-500 text-white" : "bg-red-500 text-white"
+                      }`}
                     >
                       {currentChallenge.type === "truth" ? "WAHRHEIT" : "PFLICHT"}
                     </Badge>
-                    <Badge className={`text-white ${getDifficultyColor(currentChallenge.difficulty)}`}>
+                    <Badge
+                      className={`apple-badge ${getDifficultyColor(currentChallenge.difficulty)} text-white px-4 py-2`}
+                    >
                       {getDifficultyText(currentChallenge.difficulty)}
                     </Badge>
                   </div>
-                  <p className="text-base sm:text-lg font-medium p-4 bg-white dark:bg-gray-700 dark:text-white rounded-lg border-2 border-dashed dark:border-gray-600">
-                    {currentChallenge.content}
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                    <Button onClick={() => completeChallenge()} className="text-base sm:text-lg py-4 px-6">
+                  <div className="apple-card p-8 bg-gray-50/80 dark:bg-gray-800/80 border-2 border-dashed border-gray-300 dark:border-gray-600">
+                    <p className="text-xl font-medium leading-relaxed">{currentChallenge.content}</p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button onClick={() => completeChallenge()} className="apple-button h-12 px-8">
+                      <Check className="h-5 w-5 mr-2" />
                       Erledigt
                     </Button>
-                    <Button
-                      onClick={() => completeChallenge(5)}
-                      variant="outline"
-                      className="text-base sm:text-lg py-4 px-6 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
-                      ⭐ Super!
+                    <Button onClick={() => completeChallenge(5)} className="apple-button-secondary h-12 px-8">
+                      <Star className="h-5 w-5 mr-2" />
+                      Super!
                     </Button>
-                    <Button
-                      onClick={nextTurn}
-                      variant="ghost"
-                      className="text-base sm:text-lg py-4 px-6 dark:text-gray-300 dark:hover:bg-gray-700"
-                    >
+                    <Button onClick={nextTurn} variant="ghost" className="apple-button-secondary h-12 px-8">
                       Überspringen
                     </Button>
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
-        )}
+            </div>
+          </div>
+        </section>
+      )}
 
-        <Card className="dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-center dark:text-white">Spielregeln</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm space-y-2">
-            <p className="dark:text-gray-300">
-              • Wähle <strong>Wahrheit</strong>, um eine Frage ehrlich zu beantworten
-            </p>
-            <p className="dark:text-gray-300">
-              • Wähle <strong>Pflicht</strong>, um eine Herausforderung zu meistern
-            </p>
-            <p className="dark:text-gray-300">
-              • Jeder sollte sich wohlfühlen - überspringe alles, womit du nicht einverstanden bist
-            </p>
-            <p className="dark:text-gray-300">• Romantische Aufgaben erscheinen nur zwischen kompatiblen Spielern</p>
-            <p className="dark:text-gray-300">
-              • Verschiedene Themen bieten unterschiedliche Arten von Herausforderungen
-            </p>
-            <p className="dark:text-gray-300">• Hab Spaß und sei respektvoll zu allen!</p>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Game Rules */}
+      <section className="py-16 bg-gray-50/50 dark:bg-gray-900/50">
+        <div className="max-w-2xl mx-auto px-6">
+          <div className="apple-card p-8 bg-white/90 dark:bg-gray-900/90">
+            <h3 className="text-xl font-semibold mb-6 text-center">Spielregeln</h3>
+            <div className="space-y-4 text-sm">
+              <p>
+                • Wähle <strong>Wahrheit</strong>, um eine Frage ehrlich zu beantworten
+              </p>
+              <p>
+                • Wähle <strong>Pflicht</strong>, um eine Herausforderung zu meistern
+              </p>
+              <p>• Jeder sollte sich wohlfühlen - überspringe alles, womit du nicht einverstanden bist</p>
+              <p>• Romantische Aufgaben erscheinen nur zwischen kompatiblen Spielern</p>
+              <p>• Verschiedene Themen bieten unterschiedliche Arten von Herausforderungen</p>
+              <p>• Hab Spaß und sei respektvoll zu allen!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <StatisticsModal />
       <PlayerDetailModal />
     </div>
