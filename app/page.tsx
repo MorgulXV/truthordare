@@ -12,13 +12,11 @@ import {
   ChevronRight,
   X,
   Check,
-  Star,
   Shuffle,
   Users,
   Heart,
   Edit3,
   Save,
-  BarChart3,
 } from "lucide-react"
 
 interface Player {
@@ -26,24 +24,6 @@ interface Player {
   name: string
   gender: string
   sexuality: string
-  statistics: {
-    completedChallenges: CompletedChallenge[]
-    totalChallenges: number
-    favoriteThemes: { [themeId: string]: number }
-    difficultyPreferences: { [difficulty: string]: number }
-    truthsCompleted: number
-    daresCompleted: number
-  }
-}
-
-interface CompletedChallenge {
-  id: string
-  type: "truth" | "dare"
-  content: string
-  theme: string
-  difficulty: "easy" | "medium" | "hard"
-  completedAt: Date
-  rating?: number
 }
 
 interface Challenge {
@@ -1537,8 +1517,6 @@ export default function TruthOrDareGame() {
   const [newPlayerSexuality, setNewPlayerSexuality] = useState("")
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium")
   const [selectedThemes, setSelectedThemes] = useState<string[]>(["classic"])
-  const [showStatistics, setShowStatistics] = useState(false)
-  const [selectedPlayerStats, setSelectedPlayerStats] = useState<Player | null>(null)
   const [lastSelectedPlayerId, setLastSelectedPlayerId] = useState<string | null>(null)
   const [darkMode, setDarkMode] = useState(false)
   const [editingPlayer, setEditingPlayer] = useState<string | null>(null)
@@ -1637,14 +1615,6 @@ export default function TruthOrDareGame() {
         name: newPlayerName,
         gender: newPlayerGender,
         sexuality: newPlayerSexuality,
-        statistics: {
-          completedChallenges: [],
-          totalChallenges: 0,
-          favoriteThemes: {},
-          difficultyPreferences: {},
-          truthsCompleted: 0,
-          daresCompleted: 0,
-        },
       }
       setPlayers([...players, newPlayer])
       setNewPlayerName("")
@@ -1823,216 +1793,18 @@ export default function TruthOrDareGame() {
     return themePacks.find((t) => t.id === themeId)
   }
 
-  const completeChallenge = (rating?: number) => {
-    if (!currentPlayer || !currentChallenge) return
-
-    const completedChallengeData: CompletedChallenge = {
-      id: Date.now().toString(),
-      type: currentChallenge.type,
-      content: currentChallenge.content,
-      theme: currentChallenge.theme,
-      difficulty: currentChallenge.difficulty,
-      completedAt: new Date(),
-      rating: rating,
-    }
-
-    const updatedPlayers = players.map((player) => {
-      if (player.id === currentPlayer.id) {
-        const newStats = { ...player.statistics }
-
-        // Add completed challenge
-        newStats.completedChallenges.push(completedChallengeData)
-        newStats.totalChallenges += 1
-
-        // Update type counters
-        if (currentChallenge.type === "truth") {
-          newStats.truthsCompleted += 1
-        } else {
-          newStats.daresCompleted += 1
-        }
-
-        // Update favorite themes
-        newStats.favoriteThemes[currentChallenge.theme] = (newStats.favoriteThemes[currentChallenge.theme] || 0) + 1
-
-        // Update difficulty preferences
-        newStats.difficultyPreferences[currentChallenge.difficulty] =
-          (newStats.difficultyPreferences[currentChallenge.difficulty] || 0) + 1
-
-        return { ...player, statistics: newStats }
-      }
-      return player
-    })
-
-    setPlayers(updatedPlayers)
+  const completeChallenge = () => {
     nextTurn()
   }
 
-  const getFavoriteTheme = (player: Player): string => {
-    const themes = player.statistics.favoriteThemes
-    const maxTheme = Object.keys(themes).reduce((a, b) => (themes[a] > themes[b] ? a : b), Object.keys(themes)[0])
-    return maxTheme || "classic"
-  }
 
-  const getFavoriteDifficulty = (player: Player): string => {
-    const difficulties = player.statistics.difficultyPreferences
-    const maxDifficulty = Object.keys(difficulties).reduce(
-      (a, b) => (difficulties[a] > difficulties[b] ? a : b),
-      Object.keys(difficulties)[0],
-    )
-    return maxDifficulty || "medium"
-  }
-
-  const getCompletionRate = (player: Player): number => {
-    if (player.statistics.totalChallenges === 0) return 0
-    return Math.round((player.statistics.completedChallenges.length / player.statistics.totalChallenges) * 100)
-  }
-
-  const StatisticsModal = () =>
-    showStatistics && (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 smooth-transition">
-        <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-card rounded-3xl">
-          <div className="p-8">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Spieler Statistiken
-              </h2>
-              <Button
-                variant="ghost"
-                onClick={() => setShowStatistics(false)}
-                className="glass-button h-12 w-12 rounded-full p-0"
-              >
-                <X className="h-6 w-6" />
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {players.map((player) => (
-                <div key={player.id} className="glass-card rounded-2xl p-6 floating-animation">
-                  <h3 className="text-xl font-semibold mb-4 text-center">{player.name}</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm opacity-70">Herausforderungen</span>
-                      <div className="glass-morphism rounded-full px-3 py-1 text-sm font-medium">
-                        {player.statistics.totalChallenges}
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm opacity-70">Wahrheiten</span>
-                      <div className="glass-morphism rounded-full px-3 py-1 text-sm font-medium text-blue-600">
-                        {player.statistics.truthsCompleted}
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm opacity-70">Pflichten</span>
-                      <div className="glass-morphism rounded-full px-3 py-1 text-sm font-medium text-red-600">
-                        {player.statistics.daresCompleted}
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm opacity-70">Lieblings-Thema</span>
-                      <div className="glass-morphism rounded-full px-3 py-1 text-sm font-medium">
-                        {getThemeInfo(getFavoriteTheme(player))?.icon} {getThemeInfo(getFavoriteTheme(player))?.name}
-                      </div>
-                    </div>
-                    <div className="mt-4">
-                      <Button onClick={() => setSelectedPlayerStats(player)} className="glass-button w-full rounded-xl">
-                        Details anzeigen
-                        <ChevronRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-
-  const PlayerDetailModal = () =>
-    selectedPlayerStats && (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 smooth-transition">
-        <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-card rounded-3xl">
-          <div className="p-8">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                {selectedPlayerStats.name}
-              </h2>
-              <Button
-                variant="ghost"
-                onClick={() => setSelectedPlayerStats(null)}
-                className="glass-button h-12 w-12 rounded-full p-0"
-              >
-                <X className="h-6 w-6" />
-              </Button>
-            </div>
-            <div className="space-y-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="glass-card rounded-2xl p-6">
-                  <h4 className="text-lg font-semibold mb-4">Themen-Verteilung</h4>
-                  <div className="space-y-2">
-                    {Object.entries(selectedPlayerStats.statistics.favoriteThemes).map(([themeId, count]) => (
-                      <div key={themeId} className="flex justify-between items-center">
-                        <span className="text-sm">{getThemeInfo(themeId)?.name}</span>
-                        <div className="glass-morphism rounded-full px-3 py-1 text-sm font-medium">{count}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="glass-card rounded-2xl p-6">
-                  <h4 className="text-lg font-semibold mb-4">Schwierigkeits-Verteilung</h4>
-                  <div className="space-y-2">
-                    {Object.entries(selectedPlayerStats.statistics.difficultyPreferences).map(([diff, count]) => (
-                      <div key={diff} className="flex justify-between items-center">
-                        <span className="text-sm">{getDifficultyText(diff)}</span>
-                        <div className="glass-morphism rounded-full px-3 py-1 text-sm font-medium">{count}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="glass-card rounded-2xl p-6">
-                <h4 className="text-lg font-semibold mb-4">Letzte Herausforderungen</h4>
-                <div className="space-y-3 max-h-60 overflow-y-auto">
-                  {selectedPlayerStats.statistics.completedChallenges
-                    .slice(-10)
-                    .reverse()
-                    .map((challenge, index) => (
-                      <div key={index} className="glass-morphism rounded-xl p-3">
-                        <div className="flex justify-between items-start mb-2">
-                          <div
-                            className={`glass-morphism rounded-full px-3 py-1 text-sm font-medium ${
-                              challenge.type === "truth" ? "text-blue-600" : "text-red-600"
-                            }`}
-                          >
-                            {challenge.type === "truth" ? "Wahrheit" : "Pflicht"}
-                          </div>
-                          <div className="flex gap-2 items-center">
-                            <div
-                              className={`bg-gradient-to-r ${getDifficultyColor(challenge.difficulty)} text-white rounded-full px-3 py-1 text-sm font-medium`}
-                            >
-                              {getDifficultyText(challenge.difficulty)}
-                            </div>
-                            {challenge.rating && <Star className="h-4 w-4 text-yellow-500 fill-current" />}
-                          </div>
-                        </div>
-                        <p className="text-sm opacity-70 line-clamp-2">{challenge.content}</p>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
 
   if (gameState === "setup") {
     return (
       <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
         {/* Liquid Glass Background */}
-        <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
-          <div className="absolute inset-0 liquid-surface opacity-30"></div>
+        <div className="fixed inset-0 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
+          <div className="absolute inset-0 liquid-surface opacity-20"></div>
         </div>
 
         {/* Hero Section */}
@@ -2314,8 +2086,8 @@ export default function TruthOrDareGame() {
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
       {/* Liquid Glass Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
-        <div className="absolute inset-0 liquid-surface opacity-30"></div>
+      <div className="fixed inset-0 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
+        <div className="absolute inset-0 liquid-surface opacity-20"></div>
       </div>
 
       {/* Game Header */}
@@ -2361,14 +2133,6 @@ export default function TruthOrDareGame() {
               className="glass-button h-10 px-4 rounded-full border-0 bg-transparent"
             >
               Spiel beenden
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowStatistics(true)}
-              className="glass-button h-10 px-4 rounded-full border-0"
-            >
-              <BarChart3 className="h-4 w-4 mr-2" />
-              Statistiken
             </Button>
           </div>
         </div>
@@ -2419,16 +2183,9 @@ export default function TruthOrDareGame() {
                     <p className="text-2xl font-medium leading-relaxed">{currentChallenge.content}</p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button onClick={() => completeChallenge()} className="glass-button h-14 px-10 text-lg rounded-2xl">
+                    <Button onClick={completeChallenge} className="glass-button h-14 px-10 text-lg rounded-2xl">
                       <Check className="h-6 w-6 mr-3" />
-                      Erledigt
-                    </Button>
-                    <Button
-                      onClick={() => completeChallenge(5)}
-                      className="glass-button h-14 px-10 text-lg rounded-2xl"
-                    >
-                      <Star className="h-6 w-6 mr-3" />
-                      Super!
+                      Weiter
                     </Button>
                     <Button onClick={nextTurn} variant="ghost" className="glass-button h-14 px-10 text-lg rounded-2xl">
                       Überspringen
@@ -2462,8 +2219,6 @@ export default function TruthOrDareGame() {
         </div>
       </section>
 
-      <StatisticsModal />
-      <PlayerDetailModal />
     </div>
   )
 }
