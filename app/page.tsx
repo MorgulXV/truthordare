@@ -1802,9 +1802,9 @@ export default function TruthOrDareGame() {
   if (gameState === "setup") {
     return (
       <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
-        {/* Liquid Glass Background */}
-        <div className="fixed inset-0 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
-          <div className="absolute inset-0 liquid-surface opacity-20"></div>
+        {/* Apple Liquid Glass Background */}
+        <div className="fixed inset-0 apple-liquid-background">
+          <div className="absolute inset-0 apple-shimmer"></div>
         </div>
 
         {/* Hero Section */}
@@ -1823,10 +1823,10 @@ export default function TruthOrDareGame() {
                 </Button>
               </div>
             </div>
-            <h1 className="text-6xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="apple-title-1 mb-8 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
               Wahrheit oder Pflicht
             </h1>
-            <p className="text-2xl mb-16 opacity-80 font-light">
+            <p className="apple-title-3 mb-16 opacity-80">
               Ein inklusives Spiel für alle mit verschiedenen Themen und Schwierigkeitsgraden
             </p>
           </div>
@@ -1835,14 +1835,14 @@ export default function TruthOrDareGame() {
         {/* Player Setup Section */}
         <section className="relative py-16">
           <div className="max-w-2xl mx-auto px-6">
-            <div className="glass-card rounded-3xl p-8 mb-8">
+            <div className="apple-liquid-card rounded-3xl p-8 mb-8">
               <div className="flex items-center gap-3 mb-8">
                 <Users className="h-8 w-8 text-blue-500" />
-                <h2 className="text-3xl font-bold">Spieler hinzufügen</h2>
+                <h2 className="apple-title-2">Spieler hinzufügen</h2>
               </div>
               <div className="space-y-6">
                 <div>
-                  <Label htmlFor="name" className="text-sm font-medium mb-3 block opacity-80">
+                  <Label htmlFor="name" className="apple-footnote font-medium mb-3 block opacity-80">
                     Name
                   </Label>
                   <Input
@@ -1850,11 +1850,11 @@ export default function TruthOrDareGame() {
                     value={newPlayerName}
                     onChange={(e) => setNewPlayerName(e.target.value)}
                     placeholder="Name eingeben"
-                    className="glass-input h-14 text-lg rounded-2xl border-0"
+                    className="glass-input h-14 apple-body rounded-2xl border-0 apple-focus-ring"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="gender" className="text-sm font-medium mb-3 block opacity-80">
+                  <Label htmlFor="gender" className="apple-footnote font-medium mb-3 block opacity-80">
                     Geschlecht
                   </Label>
                   <Select value={newPlayerGender} onValueChange={setNewPlayerGender}>
@@ -1872,7 +1872,7 @@ export default function TruthOrDareGame() {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="sexuality" className="text-sm font-medium mb-3 block opacity-80">
+                  <Label htmlFor="sexuality" className="apple-footnote font-medium mb-3 block opacity-80">
                     Sexualität
                   </Label>
                   <Select value={newPlayerSexuality} onValueChange={setNewPlayerSexuality}>
@@ -1892,7 +1892,7 @@ export default function TruthOrDareGame() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button onClick={addPlayer} className="glass-button w-full h-14 text-lg rounded-2xl font-semibold">
+                <Button onClick={addPlayer} className="apple-primary-button w-full h-14 apple-body rounded-2xl apple-focus-ring">
                   <Plus className="h-6 w-6 mr-3" />
                   Spieler hinzufügen
                 </Button>
@@ -1901,13 +1901,13 @@ export default function TruthOrDareGame() {
 
             {/* Players List */}
             {players.length > 0 && (
-              <div className="glass-card rounded-3xl p-8 mb-8">
-                <h3 className="text-2xl font-bold mb-8">Spieler ({players.length})</h3>
+              <div className="apple-liquid-card rounded-3xl p-8 mb-8">
+                <h3 className="apple-title-2 mb-8">Spieler ({players.length})</h3>
                 <div className="space-y-4">
                   {players.map((player) => (
                     <div
                       key={player.id}
-                      className="glass-morphism rounded-2xl p-6 smooth-transition hover:bg-white/20 dark:hover:bg-white/10"
+                      className="apple-liquid-card rounded-2xl p-6 apple-transition hover:bg-white/20 dark:hover:bg-white/10"
                     >
                       {editingPlayer === player.id ? (
                         <div className="space-y-4">
@@ -1965,7 +1965,7 @@ export default function TruthOrDareGame() {
                       ) : (
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="font-semibold text-xl">{player.name}</span>
+                            <span className="apple-headline">{player.name}</span>
                           </div>
                           <div className="flex gap-3">
                             <Button
@@ -1997,15 +1997,15 @@ export default function TruthOrDareGame() {
         <section className="relative py-16">
           <div className="max-w-6xl mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Schwierigkeitsgrad wählen</h2>
-              <p className="text-xl opacity-80">Wähle den Schwierigkeitsgrad für das Spiel</p>
+              <h2 className="apple-title-1 mb-6">Schwierigkeitsgrad wählen</h2>
+              <p className="apple-title-3 opacity-80">Wähle den Schwierigkeitsgrad für das Spiel</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {["easy", "medium", "hard"].map((diff) => (
                 <div
                   key={diff}
-                  className={`glass-card rounded-3xl p-8 cursor-pointer smooth-transition ${
-                    difficulty === diff ? "glow-effect scale-105" : "hover:scale-102"
+                  className={`apple-liquid-card rounded-3xl p-8 cursor-pointer apple-transition apple-hit-target ${
+                    difficulty === diff ? "apple-glow scale-105" : "hover:scale-102"
                   }`}
                   onClick={() => setDifficulty(diff as "easy" | "medium" | "hard")}
                 >
@@ -2013,8 +2013,8 @@ export default function TruthOrDareGame() {
                     <div
                       className={`w-16 h-16 rounded-full mx-auto mb-6 bg-gradient-to-r ${getDifficultyColor(diff)}`}
                     ></div>
-                    <h3 className="text-2xl font-bold mb-4">{getDifficultyText(diff)}</h3>
-                    <p className="opacity-70 mb-6 text-lg">
+                    <h3 className="apple-title-2 mb-4">{getDifficultyText(diff)}</h3>
+                    <p className="opacity-70 mb-6 apple-body">
                       {diff === "easy" && "Harmlose und lustige Aufgaben"}
                       {diff === "medium" && "Mittlere Herausforderungen"}
                       {diff === "hard" && "Mutige und gewagte Aufgaben"}
@@ -2030,15 +2030,15 @@ export default function TruthOrDareGame() {
         <section className="relative py-16">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6">Themen wählen</h2>
-              <p className="text-xl opacity-80">Wähle welche Themen-Pakete du einschließen möchtest</p>
+              <h2 className="apple-title-1 mb-6">Themen wählen</h2>
+              <p className="apple-title-3 opacity-80">Wähle welche Themen-Pakete du einschließen möchtest</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {themePacks.map((theme) => (
                 <div
                   key={theme.id}
-                  className={`glass-card rounded-3xl p-8 cursor-pointer smooth-transition ${
-                    selectedThemes.includes(theme.id) ? "glow-effect scale-105" : "hover:scale-102"
+                  className={`apple-liquid-card rounded-3xl p-8 cursor-pointer apple-transition apple-hit-target ${
+                    selectedThemes.includes(theme.id) ? "apple-glow scale-105" : "hover:scale-102"
                   }`}
                   onClick={() => {
                     if (selectedThemes.includes(theme.id)) {
@@ -2052,14 +2052,14 @@ export default function TruthOrDareGame() {
                 >
                   <div className="text-center">
                     <div className="text-5xl mb-6">{theme.icon}</div>
-                    <h3 className="text-2xl font-bold mb-4">{theme.name}</h3>
-                    <p className="opacity-70 mb-6 text-lg">{theme.description}</p>
+                    <h3 className="apple-title-2 mb-4">{theme.name}</h3>
+                    <p className="opacity-70 mb-6 apple-body">{theme.description}</p>
                     <div className={`w-full h-2 rounded-full bg-gradient-to-r ${theme.color} opacity-60`}></div>
                   </div>
                 </div>
               ))}
             </div>
-            <p className="text-center opacity-60 mt-12 text-lg">
+            <p className="text-center opacity-60 mt-12 apple-body">
               Ausgewählte Themen: {selectedThemes.length} • Mindestens ein Thema muss ausgewählt sein
             </p>
           </div>
@@ -2071,12 +2071,12 @@ export default function TruthOrDareGame() {
             <Button
               onClick={startGame}
               disabled={players.length < 2}
-              className="glass-button h-20 px-16 text-2xl font-bold rounded-3xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="apple-primary-button h-20 px-16 apple-title-2 rounded-3xl disabled:opacity-50 disabled:cursor-not-allowed apple-focus-ring"
             >
               Spiel starten
               <ChevronRight className="h-8 w-8 ml-4" />
             </Button>
-            {players.length < 2 && <p className="opacity-60 mt-6 text-lg">Mindestens 2 Spieler erforderlich</p>}
+            {players.length < 2 && <p className="opacity-60 mt-6 apple-body">Mindestens 2 Spieler erforderlich</p>}
           </div>
         </section>
       </div>
@@ -2085,9 +2085,9 @@ export default function TruthOrDareGame() {
 
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
-      {/* Liquid Glass Background */}
-      <div className="fixed inset-0 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
-        <div className="absolute inset-0 liquid-surface opacity-20"></div>
+      {/* Apple Liquid Glass Background */}
+      <div className="fixed inset-0 apple-liquid-background">
+        <div className="absolute inset-0 apple-shimmer"></div>
       </div>
 
       {/* Game Header */}
@@ -2096,25 +2096,25 @@ export default function TruthOrDareGame() {
           <div className="flex justify-between items-center mb-6">
             <div className="flex-1"></div>
             <div className="flex-1 flex justify-center">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="apple-title-3 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 Wahrheit oder Pflicht
               </h1>
             </div>
             <div className="flex-1 flex justify-end">
-              <Button variant="ghost" onClick={toggleDarkMode} className="glass-button h-12 w-12 rounded-full p-0">
+              <Button variant="ghost" onClick={toggleDarkMode} className="apple-capsule-button h-12 w-12 rounded-full p-0 apple-focus-ring">
                 {darkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
               </Button>
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
             <div
-              className={`glass-morphism rounded-full px-4 py-2 bg-gradient-to-r ${getDifficultyColor(difficulty)} text-white font-medium`}
+              className={`apple-capsule-button rounded-full px-4 py-2 bg-gradient-to-r ${getDifficultyColor(difficulty)} text-white font-medium`}
             >
               {getDifficultyText(difficulty)}
             </div>
             {currentChallenge && (
               <div
-                className={`glass-morphism rounded-full px-4 py-2 bg-gradient-to-r ${getThemeInfo(currentChallenge.theme)?.color || "from-gray-400 to-gray-600"} text-white font-medium`}
+                className={`apple-capsule-button rounded-full px-4 py-2 bg-gradient-to-r ${getThemeInfo(currentChallenge.theme)?.color || "from-gray-400 to-gray-600"} text-white font-medium`}
               >
                 {getThemeInfo(currentChallenge.theme)?.icon} {getThemeInfo(currentChallenge.theme)?.name}
               </div>
@@ -2122,7 +2122,7 @@ export default function TruthOrDareGame() {
             <Button
               variant="outline"
               onClick={selectRandomPlayer}
-              className="glass-button h-10 px-4 rounded-full border-0 bg-transparent"
+              className="apple-capsule-button h-10 px-4 rounded-full border-0 bg-transparent apple-focus-ring"
             >
               <Shuffle className="h-4 w-4 mr-2" />
               Neuer Spieler
@@ -2130,7 +2130,7 @@ export default function TruthOrDareGame() {
             <Button
               variant="outline"
               onClick={resetGame}
-              className="glass-button h-10 px-4 rounded-full border-0 bg-transparent"
+              className="apple-capsule-button h-10 px-4 rounded-full border-0 bg-transparent apple-focus-ring"
             >
               Spiel beenden
             </Button>
@@ -2142,22 +2142,22 @@ export default function TruthOrDareGame() {
       {currentPlayer && (
         <section className="relative py-20">
           <div className="max-w-3xl mx-auto px-6">
-            <div className="glass-card rounded-3xl p-12 text-center floating-animation">
-              <h2 className="text-4xl font-bold mb-8">{currentPlayer.name} ist dran</h2>
+            <div className="apple-liquid-card rounded-3xl p-12 text-center apple-floating">
+              <h2 className="apple-title-1 mb-8">{currentPlayer.name} ist dran</h2>
 
               {!currentChallenge ? (
                 <div className="space-y-8">
-                  <p className="text-2xl opacity-80 font-light">Wähle deine Herausforderung</p>
+                  <p className="apple-title-2 opacity-80">Wähle deine Herausforderung</p>
                   <div className="flex flex-col sm:flex-row gap-6 justify-center">
                     <Button
                       onClick={() => selectTruthOrDare("truth")}
-                      className="glass-button h-20 px-16 text-2xl font-bold rounded-3xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700"
+                      className="apple-primary-button h-20 px-16 apple-title-2 rounded-3xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 apple-focus-ring"
                     >
                       Wahrheit
                     </Button>
                     <Button
                       onClick={() => selectTruthOrDare("dare")}
-                      className="glass-button h-20 px-16 text-2xl font-bold rounded-3xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700"
+                      className="apple-primary-button h-20 px-16 apple-title-2 rounded-3xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 apple-focus-ring"
                     >
                       Pflicht
                     </Button>
@@ -2167,27 +2167,27 @@ export default function TruthOrDareGame() {
                 <div className="space-y-10">
                   <div className="flex justify-center gap-4">
                     <div
-                      className={`glass-morphism rounded-full px-8 py-3 text-xl font-bold ${
+                      className={`apple-capsule-button rounded-full px-8 py-3 apple-headline ${
                         currentChallenge.type === "truth" ? "text-blue-600" : "text-red-600"
                       }`}
                     >
                       {currentChallenge.type === "truth" ? "WAHRHEIT" : "PFLICHT"}
                     </div>
                     <div
-                      className={`glass-morphism rounded-full px-6 py-3 bg-gradient-to-r ${getDifficultyColor(currentChallenge.difficulty)} text-white font-medium`}
+                      className={`apple-capsule-button rounded-full px-6 py-3 bg-gradient-to-r ${getDifficultyColor(currentChallenge.difficulty)} text-white apple-callout`}
                     >
                       {getDifficultyText(currentChallenge.difficulty)}
                     </div>
                   </div>
-                  <div className="glass-card rounded-3xl p-10 border-2 border-dashed border-white/30 dark:border-white/20">
-                    <p className="text-2xl font-medium leading-relaxed">{currentChallenge.content}</p>
+                  <div className="apple-liquid-card rounded-3xl p-10 border-2 border-dashed border-white/30 dark:border-white/20">
+                    <p className="apple-title-2 font-medium leading-relaxed">{currentChallenge.content}</p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button onClick={completeChallenge} className="glass-button h-14 px-10 text-lg rounded-2xl">
+                    <Button onClick={completeChallenge} className="apple-primary-button h-14 px-10 apple-body rounded-2xl apple-focus-ring">
                       <Check className="h-6 w-6 mr-3" />
                       Weiter
                     </Button>
-                    <Button onClick={nextTurn} variant="ghost" className="glass-button h-14 px-10 text-lg rounded-2xl">
+                    <Button onClick={nextTurn} variant="ghost" className="apple-capsule-button h-14 px-10 apple-body rounded-2xl apple-focus-ring">
                       Überspringen
                     </Button>
                   </div>
@@ -2201,9 +2201,9 @@ export default function TruthOrDareGame() {
       {/* Game Rules */}
       <section className="relative py-16">
         <div className="max-w-3xl mx-auto px-6">
-          <div className="glass-card rounded-3xl p-10">
-            <h3 className="text-2xl font-bold mb-8 text-center">Spielregeln</h3>
-            <div className="space-y-4 text-lg opacity-80">
+          <div className="apple-liquid-card rounded-3xl p-10">
+            <h3 className="apple-title-2 mb-8 text-center">Spielregeln</h3>
+            <div className="space-y-4 apple-body opacity-80">
               <p>
                 • Wähle <strong>Wahrheit</strong>, um eine Frage ehrlich zu beantworten
               </p>
